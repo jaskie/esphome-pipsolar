@@ -80,7 +80,6 @@ void Pipsolar::loop() {
       if (this->read_buffer_[0] == '(' && this->read_buffer_[1] == 'N' && this->read_buffer_[2] == 'A' &&
           this->read_buffer_[3] == 'K') {
         ESP_LOGD(TAG, "poll %s NACK", this->enabled_polling_commands_[this->last_polling_command_].command);
-        this->handle_poll_error_(this->enabled_polling_commands_[this->last_polling_command_].identifier);
         this->state_ = STATE_IDLE;
         return;
       }
@@ -91,7 +90,6 @@ void Pipsolar::loop() {
     } else {
       // crc failed
       // no log message necessary, check_incoming_crc_() logs
-      this->handle_poll_error_(this->enabled_polling_commands_[this->last_polling_command_].identifier);
       this->state_ = STATE_IDLE;
     }
   }
@@ -155,7 +153,6 @@ void Pipsolar::loop() {
     if (millis() - this->command_start_millis_ > esphome::pip8048::Pipsolar::COMMAND_TIMEOUT) {
       // command timeout
       ESP_LOGD(TAG, "poll %s timeout", this->enabled_polling_commands_[this->last_polling_command_].command);
-      this->handle_poll_error_(this->enabled_polling_commands_[this->last_polling_command_].identifier);
       this->state_ = STATE_IDLE;
     }
   }
@@ -317,10 +314,6 @@ void Pipsolar::handle_poll_response_(ENUMPollingCommand polling_command, const c
     default:
       break;
   }
-}
-void Pipsolar::handle_poll_error_(ENUMPollingCommand polling_command) {
-  // handlers are designed in a way that an empty message sets all sensors to unknown
-  this->handle_poll_response_(polling_command, "");
 }
 
 void Pipsolar::handle_qpiri_(const char *message) {
