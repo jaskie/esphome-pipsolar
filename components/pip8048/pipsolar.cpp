@@ -552,10 +552,7 @@ void Pipsolar::handle_qpigs_(const char *message) {
 
 void Pipsolar::handle_qmod_(const std::string message) {
   if (this->last_qmod_) {
-    this->last_qmod_->publish_state(message);
-  }
-  if (this->device_mode_) {
-    this->device_mode_->publish_state(message[1]);
+    this->last_qmod_->publish_state(message.c_str());
   }
 }
 
