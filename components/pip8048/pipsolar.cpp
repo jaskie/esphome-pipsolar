@@ -550,9 +550,15 @@ void Pipsolar::handle_qpigs_(const char *message) {
   this->read_int_sensor_(message, &pos, this->solar_feed_to_grid_power_);
 }
 
-void Pipsolar::handle_qmod_(const std::string message) {
+void Pipsolar::handle_qmod_(const char *message) {
+  std::string mode;
+  char device_mode = char(message[1]);
   if (this->last_qmod_) {
-    this->last_qmod_->publish_state(message.c_str());
+    this->last_qmod_->publish_state(message);
+  }
+  if (this->device_mode_) {
+    mode = device_mode;
+    this->device_mode_->publish_state(mode);
   }
 }
 
