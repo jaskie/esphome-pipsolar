@@ -331,7 +331,7 @@ class Pipsolar : public uart::UARTDevice, public PollingComponent {
   // these handlers are designed in a way that an empty message sets all sensors to unknown
   void handle_qpiri_(const char *message);
   void handle_qpigs_(const char *message);
-  void handle_qmod_(const std::string message);
+  void handle_qmod_(const char *message);
   void handle_qflag_(const char *message);
   void handle_qpiws_(const char *message);
   void handle_qt_(const char *message);
